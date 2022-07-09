@@ -2,6 +2,8 @@ package org.example.testing;
 
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MealTest {
@@ -17,6 +19,7 @@ class MealTest {
 
         //warotść oczekiwana, wartość aktualna
         assertEquals(28,discountedPrice);
+        assertThat(discountedPrice, equalTo(28));
 
     }
     @Test
@@ -32,7 +35,9 @@ class MealTest {
 
 
         //czy zmienne które przekzaliśmy jako argumenty wskazują na ten sam obiekt
+        //równość referencyjna
         assertSame(meal1,meal2);
+        assertThat(meal1, sameInstance(meal2));
     }
     @Test
     void referencesToTheDiffretObjectShoudNotBeEqual() {
@@ -43,6 +48,7 @@ class MealTest {
 
         //czy zmienne które przekzaliśmy jako argumenty wskazują na ten różne obiekt
         assertNotSame(meal1, meal2);
+        assertThat(meal1, not(sameInstance(meal2)));
     }
 
     @Test
@@ -61,6 +67,13 @@ class MealTest {
         Meal meal2 = new Meal(16, "Cake");
         //assercja nie działa, musimy nadpisać metodę equal z klasy java
         assertNotEquals(meal1, meal2);
+
+    }
+
+    @Test
+    void exceptionShouldBeThrownIfDiscountIsHigherThanThePrice() {
+        Meal meal = new Meal(8, "Zupa");
+        assertThrows(IllegalArgumentException.class, () -> meal.getDiscountedPrice(40));
 
     }
 }
